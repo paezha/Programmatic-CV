@@ -26,6 +26,7 @@ knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE, 
                       message = FALSE,
                       fig.show = "asis", 
+                      # Width of figures in output document is 60% of linewidth
                       out.width = "0.6\\linewidth", 
                       fig.align = "center")
 ```
@@ -47,11 +48,71 @@ library(vitae) # Templates and functions to simplify the production and maintena
 
 # About me
 
- * I trained in civil engineering before being adopted into geography.
- * My areas of interest include spatial analysis, spatial statistics, transportation, travel behavior, cities.
- * Also, too, mathematics, computer languages, science fiction, poetry, and memes.
- * I have been known to look professorial on occasion.
- * At this rate my only hope of being recognized is as the most promising oldest researcher in my discipline.
+* I trained in civil engineering before being adopted into geography.
+* My areas of interest include spatial analysis, spatial statistics, transportation, travel behavior, cities.
+* Also, too, mathematics, computer languages, science fiction, poetry, and memes.
+* I have been known to look professorial on occasion.
+* At this rate my only hope of being recognized is as the most promising oldest researcher in my discipline.
+
+<!--
+# My places
+
+```{r my-places-plot,fig.align='center', out.width="1.0\\linewidth"}
+# THIS CODE IS ADAPTED FROM LORENA ABAD'S AWESOME CV: https://github.com/loreabad6/R-CV
+library(emojifont)
+library(sf)
+library(sfnetworks)
+library(rnaturalearth) # Package to work with Natural Earth map data
+
+load.fontawesome()
+edu <- fontawesome("fa-book")
+work <- fontawesome("fa-briefcase")
+
+places <- read_csv(paste0(here(),
+                          "/assets/places.csv")) %>%
+  st_as_sf(coords = c("long",
+                      "lat"), 
+           crs = 4326) %>%
+  mutate(Year = as.Date(as.character(Year), format = "%Y", origin = "1970-01-01"),
+         label = case_when(Activity == "Education" ~ paste(edu),
+                           Activity == "Work" ~ paste(work)))
+
+as.Date_origin <- function(x){
+  as.Date(x, origin = '1970-01-01')
+}
+
+# Retrieve boundaries of countries
+world <- ne_countries("medium", 
+                      returnclass = 'sf')
+
+# Create ggplot object
+ggplot() +
+  # Plot boundaries of countries
+  geom_sf(data = world, 
+          color = 'black', 
+          lwd = 0.2) +
+  # Add text with icons
+  geom_sf_text(data = places,
+               aes(label = label,
+                   color = Year),
+               family = "fontawesome-webfont",
+               size = 3) +
+  # Project coordinates
+  coord_sf(crs = '+proj=robin') +
+  # Specify color scale parameters (palette and direction)
+  scale_color_distiller(palette = "OrRd",
+                        direction = 1,
+                        labels = as.Date_origin,
+                        breaks = as.Date_origin(c("1980-01-01", 
+                                                  "1990-01-01", 
+                                                  "2000-01-01"))) +
+  theme(legend.text=element_text(family='fontawesome-webfont')) +
+  # Set theme
+  theme_void() +
+  # Set margins
+  theme(plot.margin = margin(-1, 0, -0.5, 0, "cm"))
+```
+-->
 
 # Education
 
@@ -180,6 +241,6 @@ citations_scholar %>%
 
 ```{r refereed-publications}
 bibliography_entries(paste0(here(),"/assets/refereed-publications.bib")) %>%
-#bibliography_entries(paste0(here(),"/assets/savedrecs_2.bib")) %>%
+  #bibliography_entries(paste0(here(),"/assets/savedrecs_2.bib")) %>%
   arrange(desc(issued), desc(author$family))
 ```
