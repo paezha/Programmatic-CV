@@ -1,0 +1,274 @@
+---
+title: "Antonio Páez"
+author: Antonio Paez
+date: "`r Sys.Date()`"
+output:
+  pagedown::html_resume:
+    # set it to true for a self-contained HTML page but it'll take longer to render
+    self_contained: true
+# uncomment this line to produce HTML and PDF in RStudio:
+knit: pagedown::chrome_print
+---
+
+```{r knitr-setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE,
+                      fig.show='asis', 
+                      out.width="0.6\\linewidth", 
+                      fig.align='center')
+```
+
+```{r load-packages}
+library(glue)
+library(here)
+library(readr)
+library(scholar)
+library(tibble)
+library(tidyverse)
+library(vitae)
+```
+
+Aside
+================================================================================
+
+![Antonio Paez](https://avatars.githubusercontent.com/u/30074724)
+
+Contact Info {#contact}
+--------------------------------------------------------------------------------
+
+- <i class="fa fa-envelope"></i> paezha@mcmaster.ca
+- <i class="fa fa-github"></i> [github.com/paezha](https://github.com/paezha)
+- School of Earth, Environment and Society, McMaster University
+- 1280 Main Street West, Hamilton, Ontario, L8S 4K1 Canada
+- The full version of this CV is available [here](https://github.com/paezha/Official-CV/blob/master/awesomecv/awesomecv.pdf).
+
+
+About me {#about-me}
+--------------------------------------------------------------------------------
+
+- I trained in civil engineering before being adopted into geography.
+- My areas of interest include spatial analysis, spatial statistics, transportation, travel behavior, cities.
+
+Disclaimer {#disclaimer}
+--------------------------------------------------------------------------------
+
+Made in `R` with [**pagedown**](https://github.com/rstudio/pagedown).
+
+Last updated on `r Sys.Date()`.
+
+Main
+================================================================================
+
+Antonio Páez {#title}
+--------------------------------------------------------------------------------
+
+### Professor, School of Earth, Environment and Society
+
+### McMaster University
+
+Education {data-icon=graduation-cap data-concise=true}
+--------------------------------------------------------------------------------
+
+```{r process-education-details}
+df <- read_csv(paste0(here(),"/assets/education.csv")) %>%
+  replace_na(list(Thesis = "")) %>%
+  mutate(across(.cols = everything(),
+                ~ replace_na(.x, "")),
+         across(.cols = everything(), 
+                ~ str_replace_all(.x, 
+                                  "\\\\\'\\{a\\}",
+                                  "á")),
+         across(.cols = everything(), 
+                ~ str_replace_all(.x, 
+                                  "\\\\\'\\{e\\}",
+                                  "é")),
+         across(.cols = everything(), 
+                ~ str_replace_all(.x, 
+                                  "\\\\\'\\{i\\}",
+                                  "í")),
+         across(.cols = everything(), 
+                ~ str_replace_all(.x, 
+                                  "\\\\\'\\{o\\}",
+                                  "ó")),
+         across(.cols = everything(),
+                ~ str_replace_all(.x, 
+                                  "\\\\\'\\{u\\}",
+                                  "ú")))
+```
+
+```{r education-details, results='asis'}
+df %>% 
+  glue_data(
+   "### {Institution}",
+   "\n\n",
+   "{Degree}",
+   "\n\n",
+   "{Where}",
+   "\n\n",
+   "{Year}", 
+   "\n\n",
+   "{Thesis}",
+   "\n\n\n"
+ )
+```
+
+Academic Experience {data-icon=laptop}
+--------------------------------------------------------------------------------
+
+```{r process-employment-details}
+df <- read_csv(paste0(here(),"/assets/employment.csv"))  %>%
+  select(-Type) %>%
+  #replace_na(list(Thesis = "")) %>%
+  mutate(across(.cols = everything(),
+                ~ replace_na(.x, "")),
+         across(.cols = everything(), 
+                ~ str_replace_all(.x, 
+                                  "\\\\\'\\{a\\}",
+                                  "á")),
+         across(.cols = everything(), 
+                ~ str_replace_all(.x, 
+                                  "\\\\\'\\{e\\}",
+                                  "é")),
+         across(.cols = everything(), 
+                ~ str_replace_all(.x, 
+                                  "\\\\\'\\{i\\}",
+                                  "í")),
+         across(.cols = everything(), 
+                ~ str_replace_all(.x, 
+                                  "\\\\\'\\{o\\}",
+                                  "ó")),
+         across(.cols = everything(),
+                ~ str_replace_all(.x, 
+                                  "\\\\\'\\{u\\}",
+                                  "ú")))
+```
+
+```{r employment-details, results='asis'}
+df %>% 
+  glue_data(
+   "### {Position}",
+   "\n\n",
+   "{Organization}",
+   "\n\n",
+   "{Where}",
+   "\n\n",
+   "{Year}",
+   "\n\n\n"
+ )
+```
+
+<!--
+Professional Experience {data-icon=suitcase}
+--------------------------------------------------------------------------------
+
+### Data Scientist, intern
+
+SupStat Inc.
+
+Beijing, China
+
+2014
+
+::: concise
+- Taught R language to beginners. 
+- Wrote Shiny app demos.
+- Converted statistical tutorials from SPSS to R language.
+:::
+
+### Bioinformatician
+
+My Health Gene Technology Co., Ltd.
+
+Beijing, China
+
+2015 - 2016
+
+::: concise
+- Analyzed whole-exome sequencing data. 
+- Wrote analysis pipelines of ChIP-seq, single cell DNA-seq and single cell RNA-seq.
+- Studied tumor metastasis and wrote research reports. 
+- Also did case studies to identify the genetic defect causing rare disease.
+:::
+
+
+Teaching Experience {data-icon=chalkboard-teacher}
+--------------------------------------------------------------------------------
+
+### Introduction to R Language for Beginners.
+
+Instructor of R and Data Mining Training Courses at SupStat Inc.
+
+Beijing, China
+-->
+
+Selected Publications {data-icon=file}
+--------------------------------------------------------------------------------
+
+```{r selected-publications, results='asis'}
+id <- "bLY377kAAAAJ"
+get_publications(id) %>% 
+  arrange(desc(cites)) %>% 
+  slice_head(n = 10) %>%
+  glue_data(
+   "### {author} ({year})",
+   "\n\n",
+   "{title}. {journal}, {number}",
+   "\n\n",
+   "Number of cites (Google Scholar): {cites}",
+   "\n\n",
+   " ",
+   "\n\n\n"
+ )
+
+```
+
+Selected Talks, Courses, Seminars, and Panels {data-icon=file}
+--------------------------------------------------------------------------------
+
+```{r process-talks-courses-details}
+df <- read_csv(paste0(here(),"/assets/talks.csv"))  %>%
+  #select(-Type) %>%
+  #replace_na(list(Thesis = "")) %>%
+  mutate(across(.cols = everything(),
+                ~ replace_na(.x, "")),
+         across(.cols = everything(), 
+                ~ str_replace_all(.x, 
+                                  "\\\\\'\\{a\\}",
+                                  "á")),
+         across(.cols = everything(), 
+                ~ str_replace_all(.x, 
+                                  "\\\\\'\\{e\\}",
+                                  "é")),
+         across(.cols = everything(), 
+                ~ str_replace_all(.x, 
+                                  "\\\\\'\\{i\\}",
+                                  "í")),
+         across(.cols = everything(), 
+                ~ str_replace_all(.x, 
+                                  "\\\\\'\\{o\\}",
+                                  "ó")),
+         across(.cols = everything(),
+                ~ str_replace_all(.x, 
+                                  "\\\\\'\\{u\\}",
+                                  "ú")),
+         across(.cols = everything(),
+                ~ replace_na(.x, "")))
+```
+
+```{r talks-courses-details, results='asis'}
+df %>%
+  slice_head(n = 10) %>%
+  glue_data(
+   "### {Title}",
+   "\n\n",
+   "{What}, {Role}",
+   "\n\n",
+   "{Where}",
+   "\n\n",
+   "{Year}",
+   "\n\n",
+   "{Organization}",
+   "\n\n\n"
+ )
+```
