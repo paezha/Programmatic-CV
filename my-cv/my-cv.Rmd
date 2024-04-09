@@ -31,20 +31,23 @@ knitr::opts_chunk$set(echo = FALSE,
                       fig.align = "center")
 ```
 
-```{r current-year}
-# Retrieve current year
-current_year <- as.numeric(as.character(Sys.time(), '%Y')) # Update year
-```
-
 ```{r load-packages}
 library(dplyr) # Data carpentry
 library(ggplot2) # Grammar of graphics
 library(here) # Package to simplify finding files within projects
+library(lubridate) # Make Dealing with Dates a Little Easier
 library(readr) # Package to read external data, e.g., csv files
 library(scholar) # Package to analyze citation data from Google Scholar
 library(tibble) # Package to work with simple data frames
 library(vitae) # Templates and functions to simplify the production and maintenance of curriculum vitae.
 ```
+
+```{r current-year}
+# Retrieve current year
+current_year <- lubridate::year(Sys.time()) # Update year
+```
+
+
 
 # About me
 
@@ -57,11 +60,11 @@ library(vitae) # Templates and functions to simplify the production and maintena
 <!--
 # My places
 
-```{r my-places-plot,fig.align='center', out.width="1.0\\linewidth"}
+```{r my-places-plot,fig.align='center', out.width="1.0\\linewidth", eval = FALSE}
 # THIS CODE IS ADAPTED FROM LORENA ABAD'S AWESOME CV: https://github.com/loreabad6/R-CV
-library(emojifont)
-library(sf)
-library(sfnetworks)
+library(emojifont) # Emoji and Font Awesome in Graphics
+library(sf) # Simple Features for R
+library(sfnetworks) # Tidy Geospatial Networks
 library(rnaturalearth) # Package to work with Natural Earth map data
 
 load.fontawesome()
@@ -244,3 +247,4 @@ bibliography_entries(paste0(here(),"/assets/refereed-publications.bib")) %>%
   #bibliography_entries(paste0(here(),"/assets/savedrecs_2.bib")) %>%
   arrange(desc(issued), desc(author$family))
 ```
+
